@@ -18,6 +18,9 @@ TAU = 1e-2              # for soft update of target parameters
 LR_ACTOR = 1e-4         # learning rate of the actor 
 LR_CRITIC = 3e-4        # learning rate of the critic
 GRAD_CLIP = 1
+N_LEARN_UPDATES = 1
+UPDATE_EVERY = 1
+EXPLORATION_DECAY = 0.9995 #0.999
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -52,16 +55,22 @@ class Agent():
 
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
+
+        self.count=0
+
+        self.exploration_scale = 1.0
     
     def step(self, state, action, reward, next_state, done):
         """Save experience in replay memory, and use random sample from buffer to learn."""
         # Save experience / reward
         self.memory.add(state, action, reward, next_state, done)
-
+        self.count += 1
         # Learn, if enough samples are available in memory
-        if len(self.memory) > BATCH_SIZE:
-            experiences = self.memory.sample()
-            self.learn(experiences, GAMMA)
+        if len(self.memory) > BATCH_SIZE and self.count % UPDATE_EVERY == 0:
+            for _ in range(N_LEARN_UPDATES):
+                experiences = self.memory.sample()
+                self.learn(experiences, GAMMA)
+            self.exploration_scale = self.exploration_scale * EXPLORATION_DECAY
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""
@@ -71,11 +80,12 @@ class Agent():
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         if add_noise:
-            action += self.noise.sample()
+            action += self.noise.sample() * self.exploration_scale
         return np.clip(action, -1, 1)
 
     def reset(self):
         self.noise.reset()
+        self.count = 0
 
     def learn(self, experiences, gamma):
         """Update policy and value parameters using given batch of experience tuples.
