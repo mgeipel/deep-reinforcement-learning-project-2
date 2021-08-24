@@ -38,4 +38,4 @@ more detailed instructions can be found at https://github.com/udacity/deep-reinf
 
 `Continuous_Control.ipynb` contains the entry point to training an agent and loading a trained agent for evaluation.
 
-`Report.ipynb` documents the parameters of the double DQN used to train the agent.
+`Report.ipynb` documents the parameters of the DDPG used to train the agent.
