@@ -32,7 +32,7 @@ Download the environment from one of the links below.  You need only select the 
     - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86.zip)
     - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86_64.zip)
 
-more detailed instructions can be found at https://github.com/udacity/deep-reinforcement-learning/tree/master/p1_navigation.
+more detailed instructions can be found at https://github.com/udacity/deep-reinforcement-learning/tree/master/p2_continuous-control.
 
 ### Train an agent
 
